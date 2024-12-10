@@ -39,17 +39,30 @@
             </plugin>
 
             <!-- JAR Plugin -->
-            <plugin>
+           <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>src.main.java.MainApplication</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-jar-with-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>src.main.java.MainApplication</mainClass>
+                                </manifest>
+                            </archive>
+                            <fileName>${project.artifactId}-${project.version}</fileName>
+                            <descriptorRefs>
+                                <descriptorRef>src/main/resources/assembly.xml</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
