@@ -1,0 +1,39 @@
+name: Build and Publish Java Application
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Build Java Application
+      run: mvn -f src/pom.xml clean package
+
+    - name: Publish Artifact to JFrog
+      env:
+        JFROG_URL: ${{ secrets.JFROG_URL }}
+        JFROG_USERNAME: ${{ secrets.JFROG_USERNAME }}
+        JFROG_PASSWORD: ${{ secrets.JFROG_PASSWORD }}
+      run: |
+        curl -u $JFROG_USERNAME:$JFROG_PASSWORD -T src/target/*.jar $JFROG_URL/<repo-name>/path/to/artifact/
