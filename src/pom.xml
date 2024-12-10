@@ -65,7 +65,7 @@
                             </archive>
                             <fileName>${project.artifactId}-${project.version}</fileName>
                             <descriptorRefs>
-                                <descriptorRef>src/main/resources/assembly.xml</descriptorRef>
+                                <descriptorRef>src/assembly.xml</descriptorRef>
                             </descriptorRefs>
                         </configuration>
                     </execution>
